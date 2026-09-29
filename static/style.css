@@ -1,0 +1,102 @@
+:root {
+  --bg: #eef1f6;
+  --panel: #ffffff;
+  --text: #1c2230;
+  --muted: #6b7385;
+  --key: #f3f5f9;
+  --key-hover: #e6e9f0;
+  --fn: #dfe4ee;
+  --op: #e8eefe;
+  --op-text: #3056d3;
+  --accent: #3b66f5;
+  --accent-text: #ffffff;
+  --error: #d64545;
+  --shadow: 0 20px 50px rgba(28, 34, 48, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1218;
+    --panel: #1a1f29;
+    --text: #eef1f6;
+    --muted: #8a93a6;
+    --key: #252b37;
+    --key-hover: #2f3644;
+    --fn: #323a4a;
+    --op: #243056;
+    --op-text: #9db4ff;
+    --accent: #4d74ff;
+    --error: #ff7a7a;
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.display {
+  padding: 12px 8px 20px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.expression {
+  min-height: 1.4em;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.result {
+  font-size: 2.6rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.result.error {
+  color: var(--error);
+  font-size: 1.4rem;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.key {
+  height: 64px;
+  border: none;
+  border-radius: 16px;
+  background: var(--key);
+  color: var(--text);
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.08s;
+}
+
+.key:hover { background: var(--key-hover); }
+.key:active { transform: scale(0.96); }
+.key:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.key.fn { background: var(--fn); }
+.key.op { background: var(--op); color: var(--op-text); font-weight: 600; }
+.key.equals { background: var(--accent); color: var(--accent-text); font-weight: 600; }
+.key.wide { grid-column: span 2; }
