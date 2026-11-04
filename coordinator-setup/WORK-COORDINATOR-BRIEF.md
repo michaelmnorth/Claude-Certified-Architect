@@ -36,7 +36,7 @@ Something that works like Meta's Muse or X's Grok assistant:
 
 Run **read-only** PowerShell commands such as `Get-ChildItem`, `Get-Item` and `Test-Path` to map these. Show sizes and last-modified dates. Don't print file contents that could contain secrets.
 
-1. `C:\Users\Michael\.claude\`: user-level Claude Code config (agents, skills, settings, plugins, `CLAUDE.md`).
+1. `C:\Users\Michael\.claude\` and `C:\Users\Michael\.claude-second\`: user-level Claude Code config (agents, skills, settings, plugins, `CLAUDE.md`). Determine which account uses which, for example via the `CLAUDE_CONFIG_DIR` environment variable or app settings.
 2. Every `C:\Users\Michael\**\*claude*` folder at the top two levels of the profile, plus `Documents`.
 3. `C:\Users\Michael\Documents\Claude Work` and `C:\Users\Michael\Documents\Claude Work-Faye`. Michael copied content between his two accounts with a third-party tool, so expect duplicates.
 4. `%APPDATA%\Claude` and `%LOCALAPPDATA%` Claude folders. **Names and sizes only.** Don't open credential or token files.
@@ -106,10 +106,20 @@ The `description` field is what the coordinator uses to pick an agent, so write 
 
 ## 3. Proposed folder structure (adjust after the inventory)
 
-Put this **outside OneDrive-synced folders.** OneDrive sync conflicts with git and can corrupt repos. The suggested root is something like `C:\Users\Michael\Claude\`; confirm it with Michael.
+**Decided:** Michael wants exactly two top-level Claude folders in his profile, **`C:\Users\Michael\Claude-Work\`** and **`C:\Users\Michael\Claude-Personal\`**, with everything else nested inside them. Both are outside OneDrive; OneDrive sync conflicts with git and can corrupt repos.
+
+**Existing loose folders** in `C:\Users\Michael\` (`Claude`, `Claude Certified Architect`, `starter-app`, `support-agent`, `The Roast Room`) and in `Documents\Claude Work` / `Documents\Claude Work - Faye`:
+- Classify each as Work or Personal during the inventory.
+- **Propose** a move into `Claude-Work\` or `Claude-Personal\`, **one folder at a time and only with Michael's approval.**
+- Warn him first: Claude Code session history is keyed to the folder path, and any desktop environment or Project pointing at the old path must be updated.
+
+**Never move** the dot-folders and dot-files (`.claude`, `.claude-second`, `.claude.json`, `.cursor`, `.vscode` and others). Tools expect them in the profile root.
+- `.claude-second` may be a separate Claude Code config directory for the second account. Confirm this in Step 1.
+
+**Never use** `Documents\Claude Work - Faye\Claude-Michael Work (Faye)-*`. It is the desktop app's internal data folder (cache, sessions, local storage), not a workspace.
 
 ```
-C:\Users\Michael\Claude\
+C:\Users\Michael\Claude-Work\
 ├── work-coordinator\              ← open in WORK account only; git repo
 │   ├── CLAUDE.md                  ← coordinator identity + routing rules
 │   ├── .claude\
@@ -132,8 +142,11 @@ C:\Users\Michael\Claude\
 │   │   └── client-directory.csv   ← email domain(s) → client → Rocketlane project → Secret Server folder → status
 │   ├── state\                     ← processed email/call IDs (so nothing runs twice)
 │   └── logs\                      ← one file per run: what was read, decided, created
-│
-└── personal-coordinator\          ← open in PERSONAL account only (built later)
+└── <other work projects>\         ← e.g. migrated work folders, experiments
+
+C:\Users\Michael\Claude-Personal\
+├── personal-coordinator\          ← open in PERSONAL account only (built later)
+└── <other personal projects>\
 ```
 
 **Rules:**
@@ -267,7 +280,7 @@ Michael's starting idea is a Haiku agent checking email every 5 minutes. Assess 
 
 ## 9. Open questions to ask Michael (skip any the inventory answers)
 
-1. **Root folder:** is `C:\Users\Michael\Claude\work-coordinator` OK, or does he prefer somewhere else (outside OneDrive)?
+1. **Existing folders:** confirm Work or Personal for each loose folder you found, and the order in which to move them.
 2. **Scheduling preferences:** working hours, time zone, buffer between meetings, default meeting length, days or times to protect, how many slots to offer, and whether to auto-place tentative holds.
 3. **Notifications:** where pings go (Slack DM, desktop or phone push, or both).
 4. **Client directory:** can he give a list of active clients, their email domains and their Rocketlane projects, or should you draft one from Rocketlane and the Projects list?
@@ -282,7 +295,7 @@ Michael's starting idea is a Haiku agent checking email every 5 minutes. Assess 
 
 ## 10. Personal coordinator (later, separate account)
 
-The same pattern, built in the **personal** account in `C:\Users\Michael\Claude\personal-coordinator\`:
+The same pattern, built in the **personal** account in `C:\Users\Michael\Claude-Personal\personal-coordinator\`:
 - Possible subagents: health, personal admin, social media, personal email and calendar.
 - **No work connectors and no client data.**
 - Build it after the work coordinator's Phase 1 proves the pattern.
